@@ -5,7 +5,7 @@ import pandas as pd
 import datetime
 
 LOG_FILE_PATH = "./log/log_###DATETIME###.log"
-EXP_CSV_PATH="./exp_list_###DATETIME###.csv"
+EXP_CSV_PATH="./exp_list_###SEARCH_KEYWORD###_###DATETIME###.csv"
 log_file_path=LOG_FILE_PATH.replace("###DATETIME###",datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
 
 ### Chromeを起動する関数
@@ -40,7 +40,8 @@ def log(txt):
 ### main処理
 def main():
     log("処理開始")
-    search_keyword = "高収入"
+    search_keyword=input("検索キーワードを入力してください：")
+    log("検索キーワード:{}".format(search_keyword))
     # driverを起動
     driver = set_driver("chromedriver.exe", False)
     # Webサイトを開く
@@ -98,7 +99,7 @@ def main():
     df = pd.DataFrame({"企業名":exp_name_list,
                        "キャッチコピー":exp_copy_list,
                        "ステータス":exp_status_list})
-    df.to_csv(EXP_CSV_PATH.replace("###DATETIME###",now), encoding="utf-8-sig")
+    df.to_csv(EXP_CSV_PATH.replace("###SEARCH_KEYWORD###",search_keyword).replace("###DATETIME###",now), encoding="utf-8-sig")
     log("処理完了 成功件数: {} 件 / 失敗件数: {} 件".format(success,fail))
     
 # 直接起動された場合はmain()を起動(モジュールとして呼び出された場合は起動しないようにするため)
